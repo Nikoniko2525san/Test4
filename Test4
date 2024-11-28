@@ -1,0 +1,35 @@
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
+const LINE_MESSAGING_API = 'https://api.line.me/v2/bot/message/reply';
+const LINE_HEADER = {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer {あなたのチャネルアクセストークン}`
+};
+
+app.post('/webhook', (req, res) => {
+  const event = req.body.events[0];
+  if (event.type === 'message' && event.message.type === 'text') {
+    replyMessage(event.replyToken, event.message.text);
+  }
+  res.sendStatus(200);
+});
+
+function replyMessage(replyToken, text) {
+  const request = require('request');
+  request.post({
+    url: LINE_MESSAGING_API,
+    headers: LINE_HEADER,
+    body: JSON.stringify({
+      replyToken: replyToken,
+      messages: [{ type: 'text', text: `あなたは「${text}」と言いましたね！` }]
+    })
+  });
+}
+
+app.listen(3000, () => {
+  console.log('Bot is running on port 3000');
+});
