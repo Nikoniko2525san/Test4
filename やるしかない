@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LINE Mini App</title>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+</head>
+<body>
+    <h1>ようこそ！</h1>
+    <button id="loginButton">LINEログイン</button>
+    <script>
+        // LIFF初期化
+        liff.init({ liffId: "YOUR_LIFF_ID" })
+            .then(() => {
+                document.getElementById('loginButton').addEventListener('click', () => {
+                    liff.login();
+                });
+            })
+            .catch(err => console.error(err));
+    </script>
+</body>
+</html>
